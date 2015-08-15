@@ -26,14 +26,9 @@ public class EventGenerator {
 	}
 
 	public void createEventAtCoordinate(int x, int y) {
-		System.out.println("create event at (" + x + "," + y + ")");
 		this.byteBuffer.clear();
-		final int v = 100;
-
 		final int scale = 100;
 		for (final Parameter parameter : this.parameters) {
-			// this.byteBuffer.put(this.dataBitShifter.translateFromInteger(v +=
-			// 100));
 			if (parameter.equals(this.xParam)) {
 				this.byteBuffer.put(this.dataBitShifter.translateFromInteger(x * scale));
 			} else if (parameter.equals(this.yParam)) {

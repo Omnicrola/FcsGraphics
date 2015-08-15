@@ -24,6 +24,19 @@ public class ImageDataConverter implements IFcsDataProvider {
 
 		final EventGenerator eventGenerator = this.eventGeneratorFactory.build(sample, width, height);
 
+		createEvents(image, width, height, eventGenerator);
+		// createRandomEvents(1, eventGenerator);
+
+	}
+
+	private void createRandomEvents(int count, EventGenerator eventGenerator) {
+		for (int i = 0; i < count; i++) {
+			eventGenerator.createEventAtCoordinate(i + 100, 100);
+		}
+	}
+
+	private void createEvents(final BufferedImage image, final int width, final int height,
+	        final EventGenerator eventGenerator) {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				final int rgb = image.getRGB(x, y);
@@ -32,7 +45,6 @@ public class ImageDataConverter implements IFcsDataProvider {
 				}
 			}
 		}
-
 	}
 
 }

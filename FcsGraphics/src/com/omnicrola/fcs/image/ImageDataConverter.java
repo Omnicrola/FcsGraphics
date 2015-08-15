@@ -34,7 +34,6 @@ public class ImageDataConverter implements IFcsDataProvider {
 
 	private int randI() {
 		final int nextInt = this.random.nextInt(16777214);
-		System.out.println(nextInt);
 		return nextInt;
 	}
 

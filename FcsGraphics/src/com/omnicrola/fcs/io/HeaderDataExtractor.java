@@ -31,7 +31,8 @@ public class HeaderDataExtractor {
 	}
 
 	private static void createParameter(Parameter parameter, HashMap<String, String> headers) {
-		final int parameterId = parameter.getIndex();
+		final int parameterId = parameter.getIndex() + 1;
+		System.out.println("parameterId: " + parameterId);
 		// bytes for this parameters
 		final String bitSize = String.valueOf(parameter.getDataType().byteSize() * 8);
 		headers.put(BasicHeaderData.REQUIRED + "P" + parameterId + "B", bitSize);
@@ -40,7 +41,7 @@ public class HeaderDataExtractor {
 		headers.put(BasicHeaderData.REQUIRED + "P" + parameterId + "E", "0,0");
 
 		// maximum range for this parameter
-		final String range = String.valueOf(parameter.getMaxRange());
+		final String range = String.valueOf((int) parameter.getMaxRange());
 		headers.put(BasicHeaderData.REQUIRED + "P" + parameterId + "R", range);
 
 		// Short Name

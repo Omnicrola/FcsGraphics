@@ -15,4 +15,8 @@ public class FcsData {
 		this.fcsDataProvider = fcsDataProvider;
 	}
 
+	public FcsHeaderDataRead getHeader() {
+		return this.fcsHeaderData;
+	}
+
 }

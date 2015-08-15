@@ -8,6 +8,7 @@ import com.omnicrola.fcs.FcsHeaderData;
 import com.omnicrola.fcs.image.ImageDataConverter;
 import com.omnicrola.fcs.image.ImageDataReader;
 import com.omnicrola.fcs.io.FcsDataWriter;
+import com.omnicrola.fcs.io.FcsHeaderDataWriter;
 import com.omnicrola.util.Argument;
 import com.omnicrola.util.ArgumentParser;
 import com.omnicrola.util.ProgramArguments;
@@ -46,7 +47,9 @@ public class RenderFcs {
 
 	private static void writeFcsDataToFile(final ProgramArguments arguments, final FcsData fcsData) {
 		try {
-			final FcsDataWriter fcsDataWriter = new FcsDataWriter(arguments.get(Argument.TARGET_FILENAME));
+			final FcsHeaderDataWriter headerDataWriter = new FcsHeaderDataWriter();
+			final String targetFilename = arguments.get(Argument.TARGET_FILENAME);
+			final FcsDataWriter fcsDataWriter = new FcsDataWriter(targetFilename, headerDataWriter);
 			fcsDataWriter.write(fcsData);
 		} catch (final IOException e) {
 			SimpleLogger.error(e);

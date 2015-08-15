@@ -6,25 +6,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.omnicrola.fcs.FcsData;
+import com.omnicrola.fcs.FcsHeaderDataRead;
 import com.omnicrola.util.SimpleLogger;
 
 public class FcsDataWriter {
 
 	private final String targetFilename;
+	private final FcsHeaderDataWriter headerDataWriter;
 
-	public FcsDataWriter(String targetFilename) {
+	public FcsDataWriter(String targetFilename, FcsHeaderDataWriter headerDataWriter) {
 		this.targetFilename = targetFilename;
+		this.headerDataWriter = headerDataWriter;
 	}
 
 	public void write(FcsData fcsData) throws IOException {
 		final FileOutputStream fileOutputStream = createFile();
-		writeDataToFile(fileOutputStream);
+		writeDataToFile(fcsData, fileOutputStream);
 	}
 
-	private void writeDataToFile(final FileOutputStream fileOutputStream) throws IOException {
-		final String hello = "Hello FCS";
+	private void writeDataToFile(FcsData fcsData, final FileOutputStream fileOutputStream) throws IOException {
 		SimpleLogger.log("Writing to file... ");
-		fileOutputStream.write(hello.getBytes());
+		final FcsHeaderDataRead header = fcsData.getHeader();
+		this.headerDataWriter.write(header, fileOutputStream);
 		fileOutputStream.close();
 		SimpleLogger.log("Finished writing.");
 	}

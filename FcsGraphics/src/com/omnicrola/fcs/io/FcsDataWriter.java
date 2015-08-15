@@ -5,31 +5,39 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.omnicrola.fcs.FcsData;
 import com.omnicrola.fcs.FcsHeaderDataRead;
+import com.omnicrola.fcs.data.Sample;
 import com.omnicrola.util.SimpleLogger;
 
 public class FcsDataWriter {
 
 	private final String targetFilename;
 	private final FcsHeaderDataWriter headerDataWriter;
+	private final HeaderDataExtractor headerExtractor;
 
-	public FcsDataWriter(String targetFilename, FcsHeaderDataWriter headerDataWriter) {
+	public FcsDataWriter(String targetFilename, FcsHeaderDataWriter headerDataWriter,
+	        HeaderDataExtractor headerDataExtractor) {
 		this.targetFilename = targetFilename;
 		this.headerDataWriter = headerDataWriter;
+		this.headerExtractor = headerDataExtractor;
 	}
 
-	public void write(FcsData fcsData) throws IOException {
+	public void write(Sample sample) throws IOException {
 		final FileOutputStream fileOutputStream = createFile();
-		writeDataToFile(fcsData, fileOutputStream);
+		writeDataToFile(sample, fileOutputStream);
 	}
 
-	private void writeDataToFile(FcsData fcsData, final FileOutputStream fileOutputStream) throws IOException {
+	private void writeDataToFile(Sample sample, final FileOutputStream fileOutputStream) throws IOException {
 		SimpleLogger.log("Writing to file... ");
-		final FcsHeaderDataRead header = fcsData.getHeader();
+
+		final FcsHeaderDataRead header = getHeaderData(sample);
 		this.headerDataWriter.write(header, fileOutputStream);
 		fileOutputStream.close();
 		SimpleLogger.log("Finished writing.");
+	}
+
+	private FcsHeaderDataRead getHeaderData(Sample sample) {
+		return this.headerExtractor.extract(sample);
 	}
 
 	private FileOutputStream createFile() throws IOException, FileNotFoundException {

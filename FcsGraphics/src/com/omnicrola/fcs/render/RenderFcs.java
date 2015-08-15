@@ -2,14 +2,13 @@ package com.omnicrola.fcs.render;
 
 import java.io.IOException;
 
-import com.omnicrola.fcs.FcsData;
-import com.omnicrola.fcs.FcsEventCollection;
-import com.omnicrola.fcs.FcsHeaderData;
-import com.omnicrola.fcs.BasicHeaderData;
+import com.omnicrola.fcs.data.MemoryAllocator;
+import com.omnicrola.fcs.data.Sample;
 import com.omnicrola.fcs.image.ImageDataConverter;
 import com.omnicrola.fcs.image.ImageDataReader;
 import com.omnicrola.fcs.io.FcsDataWriter;
 import com.omnicrola.fcs.io.FcsHeaderDataWriter;
+import com.omnicrola.fcs.io.HeaderDataExtractor;
 import com.omnicrola.util.Argument;
 import com.omnicrola.util.ArgumentParser;
 import com.omnicrola.util.ProgramArguments;
@@ -20,9 +19,8 @@ public class RenderFcs {
 		SimpleLogger.log("Starting...");
 
 		final ProgramArguments arguments = parseArguments(args);
-		final FcsData fcsData = createFcsDataModel();
-		convertImageToFcsData(arguments, fcsData);
-		writeFcsDataToFile(arguments, fcsData);
+		final Sample sample = convertImageToFcsData(arguments);
+		writeFcsDataToFile(arguments, sample);
 
 		SimpleLogger.log("Done.");
 	}
@@ -33,25 +31,21 @@ public class RenderFcs {
 		return arguments;
 	}
 
-	private static FcsData createFcsDataModel() {
-		final FcsHeaderData fcsHeaderData = new FcsHeaderData(BasicHeaderData.getHeaders());
-		final FcsEventCollection fcsEventCollection = new FcsEventCollection();
-		final FcsData fcsData = new FcsData(fcsHeaderData, fcsEventCollection);
-		return fcsData;
-	}
-
-	private static void convertImageToFcsData(final ProgramArguments arguments, final FcsData fcsData) {
+	private static Sample convertImageToFcsData(final ProgramArguments arguments) {
 		final ImageDataReader imageDataReader = new ImageDataReader(arguments.get(Argument.SOURCE_IMAGE));
 		final ImageDataConverter imageDataConverter = new ImageDataConverter(imageDataReader);
-		fcsData.setData(imageDataConverter);
+		final Sample sample = new Sample(new MemoryAllocator(), 0);
+		imageDataConverter.writeToSample(sample);
+		return sample;
 	}
 
-	private static void writeFcsDataToFile(final ProgramArguments arguments, final FcsData fcsData) {
+	private static void writeFcsDataToFile(final ProgramArguments arguments, final Sample sample) {
 		try {
 			final FcsHeaderDataWriter headerDataWriter = new FcsHeaderDataWriter();
 			final String targetFilename = arguments.get(Argument.TARGET_FILENAME);
-			final FcsDataWriter fcsDataWriter = new FcsDataWriter(targetFilename, headerDataWriter);
-			fcsDataWriter.write(fcsData);
+			final FcsDataWriter fcsDataWriter = new FcsDataWriter(targetFilename, headerDataWriter,
+			        new HeaderDataExtractor());
+			fcsDataWriter.write(sample);
 		} catch (final IOException e) {
 			SimpleLogger.error(e);
 		}

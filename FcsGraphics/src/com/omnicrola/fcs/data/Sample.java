@@ -73,4 +73,8 @@ public class Sample implements ISample {
 		this.memoryBuffer = this.allocator.allocate(bufferSize);
 	}
 
+	public int getParameterCount() {
+		return this.parameterList.getParameters().size();
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.omnicrola.fcs.image;
 
 import com.omnicrola.fcs.IFcsDataProvider;
+import com.omnicrola.fcs.data.Sample;
 
 public class ImageDataConverter implements IFcsDataProvider {
 
@@ -8,6 +9,9 @@ public class ImageDataConverter implements IFcsDataProvider {
 
 	public ImageDataConverter(ImageDataReader imageDataReader) {
 		this.imageDataReader = imageDataReader;
+	}
+
+	public void writeToSample(Sample sample) {
 	}
 
 }

@@ -1,40 +1,38 @@
 package com.omnicrola.fcs.image;
 
-import java.nio.ByteBuffer;
-import java.util.Random;
+import java.awt.image.BufferedImage;
 
 import com.omnicrola.fcs.IFcsDataProvider;
-import com.omnicrola.fcs.data.DataBitShifter;
 import com.omnicrola.fcs.data.Sample;
+import com.omnicrola.util.SimpleLogger;
 
 public class ImageDataConverter implements IFcsDataProvider {
 
 	private final ImageDataReader imageDataReader;
-	private final DataBitShifter dataBitShifter;
-	private final Random random;
+	private final EventGeneratorFactory eventGeneratorFactory;
 
-	public ImageDataConverter(DataBitShifter dataBitShifter, ImageDataReader imageDataReader) {
-		this.dataBitShifter = dataBitShifter;
+	public ImageDataConverter(ImageDataReader imageDataReader, EventGeneratorFactory eventGeneratorFactory) {
 		this.imageDataReader = imageDataReader;
-		this.random = new Random(901);
+		this.eventGeneratorFactory = eventGeneratorFactory;
 	}
 
 	public void writeToSample(Sample sample) {
-		// TODO : actually do stuff
+		final BufferedImage image = this.imageDataReader.read();
+		final int width = image.getWidth();
+		final int height = image.getHeight();
+		SimpleLogger.log("Loaded image : " + width + " x " + height + " (" + (width * height) + " pixels) ");
 
-		final int parameterCount = sample.getParameterCount();
-		for (int i = 0; i < 100; i++) {
-			final ByteBuffer byteBuffer = ByteBuffer.allocate(4 * parameterCount);
-			for (int p = 0; p < parameterCount; p++) {
-				byteBuffer.put(this.dataBitShifter.translateFromInteger(randI()));
+		final EventGenerator eventGenerator = this.eventGeneratorFactory.build(sample, width, height);
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				final int rgb = image.getRGB(x, y);
+				if (rgb != -1) {
+					eventGenerator.createEventAtCoordinate(x, y);
+				}
 			}
-			sample.addEvent(byteBuffer.array());
 		}
-	}
 
-	private int randI() {
-		final int nextInt = this.random.nextInt(16777214);
-		return nextInt;
 	}
 
 }

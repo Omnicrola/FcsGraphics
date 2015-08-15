@@ -1,5 +1,6 @@
 package com.omnicrola.fcs.image;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,12 +16,13 @@ public class ImageDataReader {
 		this.argumentValue = argumentValue;
 	}
 
-	public void read() {
+	public BufferedImage read() {
 		try {
-			ImageIO.read(new File(this.argumentValue));
+			return ImageIO.read(new File(this.argumentValue));
 		} catch (final IOException e) {
 			SimpleLogger.error(e);
 		}
+		return null;
 	}
 
 }

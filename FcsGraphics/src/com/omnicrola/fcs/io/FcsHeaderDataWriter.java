@@ -49,8 +49,8 @@ public class FcsHeaderDataWriter {
 
 	private void writeAnalysisSectionOffsets(FcsHeaderDataRead header, FileOutputStream fileOutputStream)
 	        throws IOException {
-		fileOutputStream.write(EIGHT_SPACES.getBytes());
-		fileOutputStream.write(EIGHT_SPACES.getBytes());
+		fileOutputStream.write(convertIntToPaddedString(0));
+		fileOutputStream.write(convertIntToPaddedString(0));
 	}
 
 	private void writeHeaderText(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {

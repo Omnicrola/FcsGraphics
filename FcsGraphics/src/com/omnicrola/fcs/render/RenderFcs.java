@@ -14,6 +14,7 @@ import com.omnicrola.fcs.io.FcsHeaderDataWriter;
 import com.omnicrola.fcs.io.HeaderDataExtractor;
 import com.omnicrola.util.Argument;
 import com.omnicrola.util.ArgumentParser;
+import com.omnicrola.util.FileFinder;
 import com.omnicrola.util.ProgramArguments;
 import com.omnicrola.util.SimpleLogger;
 
@@ -32,7 +33,12 @@ public class RenderFcs {
 
 	private static ProgramArguments parseArguments(String[] args) {
 		final ProgramArguments arguments = ArgumentParser.parse(args);
-		arguments.assertPresent(Argument.SOURCE_IMAGE, Argument.TARGET_FILENAME);
+		if (arguments.isNotPresent(Argument.SOURCE_IMAGE)) {
+			arguments.set(Argument.SOURCE_IMAGE, FileFinder.findFile("Source Image"));
+		}
+		if (arguments.isNotPresent(Argument.TARGET_FILENAME)) {
+			arguments.set(Argument.TARGET_FILENAME, FileFinder.findFile("Target FCS Filename"));
+		}
 		return arguments;
 	}
 

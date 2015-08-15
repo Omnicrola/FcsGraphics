@@ -2,6 +2,10 @@ package com.omnicrola.fcs;
 
 public interface FcsHeaderDataRead {
 
-	int getLengthInBytes();
+	int getHeaderLengthInBytes();
+
+	int getDataLengthInBytes();
+
+	String getHeaderText();
 
 }

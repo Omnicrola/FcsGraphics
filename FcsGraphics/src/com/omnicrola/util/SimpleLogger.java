@@ -12,4 +12,9 @@ public class SimpleLogger {
 		Logger.getLogger(NAME).log(Level.ALL, message);
 	}
 
+	public static void error(Throwable exception) {
+		exception.printStackTrace();
+		Logger.getLogger(NAME).log(Level.ALL, "Error", exception);
+	}
+
 }

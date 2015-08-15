@@ -1,5 +1,7 @@
 package com.omnicrola.fcs.render;
 
+import java.io.IOException;
+
 import com.omnicrola.fcs.FcsData;
 import com.omnicrola.fcs.FcsEventCollection;
 import com.omnicrola.fcs.FcsHeaderData;
@@ -43,8 +45,12 @@ public class RenderFcs {
 	}
 
 	private static void writeFcsDataToFile(final ProgramArguments arguments, final FcsData fcsData) {
-		final FcsDataWriter fcsDataWriter = new FcsDataWriter(arguments.get(Argument.TARGET_FILENAME));
-		fcsDataWriter.write(fcsData);
+		try {
+			final FcsDataWriter fcsDataWriter = new FcsDataWriter(arguments.get(Argument.TARGET_FILENAME));
+			fcsDataWriter.write(fcsData);
+		} catch (final IOException e) {
+			SimpleLogger.error(e);
+		}
 	}
 
 }

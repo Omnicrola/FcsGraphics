@@ -12,6 +12,7 @@ public class FcsHeaderDataWriter {
 	private static final String VERSION = "FCS3.1";
 
 	private static final int TEXT_START = 58;
+	public static final String HEADER_DELIMITER = "/";
 
 	public void write(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {
 		writeVersion(fileOutputStream);
@@ -49,6 +50,7 @@ public class FcsHeaderDataWriter {
 
 	private void writeHeaderText(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {
 		final String headerText = header.getHeaderText();
+		fileOutputStream.write(FcsHeaderDataWriter.HEADER_DELIMITER.getBytes());
 		fileOutputStream.write(headerText.getBytes());
 	}
 

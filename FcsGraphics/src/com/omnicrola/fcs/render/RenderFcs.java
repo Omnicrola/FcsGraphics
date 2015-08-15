@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.omnicrola.fcs.FcsData;
 import com.omnicrola.fcs.FcsEventCollection;
 import com.omnicrola.fcs.FcsHeaderData;
+import com.omnicrola.fcs.BasicHeaderData;
 import com.omnicrola.fcs.image.ImageDataConverter;
 import com.omnicrola.fcs.image.ImageDataReader;
 import com.omnicrola.fcs.io.FcsDataWriter;
@@ -33,7 +34,7 @@ public class RenderFcs {
 	}
 
 	private static FcsData createFcsDataModel() {
-		final FcsHeaderData fcsHeaderData = new FcsHeaderData();
+		final FcsHeaderData fcsHeaderData = new FcsHeaderData(BasicHeaderData.getHeaders());
 		final FcsEventCollection fcsEventCollection = new FcsEventCollection();
 		final FcsData fcsData = new FcsData(fcsHeaderData, fcsEventCollection);
 		return fcsData;

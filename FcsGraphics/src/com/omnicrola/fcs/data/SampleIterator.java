@@ -37,7 +37,7 @@ public class SampleIterator {
 		this.accessor.rewind();
 		for (int i = 0; i < this.eventByteSize; i++) {
 			final byte value = this.readOnlyBuffer.get();
-			this.accessor.put(value);
+			this.accessor.putNextValue(value);
 		}
 		return this.accessor;
 	}

@@ -5,7 +5,7 @@ public class Parameter {
 	public static final Parameter BLANK = new Parameter("", "", 0, false, DataType.INTEGER, 10);
 
 	public static Parameter makeDefault(int index) {
-		return new Parameter("NONE", "NONE", index, false, DataType.INTEGER, 10);
+		return new Parameter("NONE", "NONE", index, false, DataType.INTEGER, 16777216);
 	}
 
 	private final int index;

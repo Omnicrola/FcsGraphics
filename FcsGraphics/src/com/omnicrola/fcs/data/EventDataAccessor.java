@@ -40,7 +40,7 @@ public class EventDataAccessor implements IEventDataAccessor, IEventDataWriter {
 	}
 
 	@Override
-	public void put(byte value) {
+	public void putNextValue(byte value) {
 		this.eventData[this.writePointer] = value;
 		this.writePointer++;
 	}

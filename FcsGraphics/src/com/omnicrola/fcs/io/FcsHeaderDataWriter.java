@@ -11,7 +11,7 @@ public class FcsHeaderDataWriter {
 	private static final String FOUR_SPACES = "    ";
 	private static final String VERSION = "FCS3.1";
 
-	private static final int TEXT_START = 58;
+	private static final int BYTES_TAKEN_BY_OFFSETS = 58;
 	public static final String HEADER_DELIMITER = "/";
 
 	public void write(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {
@@ -30,14 +30,14 @@ public class FcsHeaderDataWriter {
 	private void writeTextSectionOffsets(FcsHeaderDataRead header, FileOutputStream fileOutputStream)
 	        throws IOException {
 		final int textLength = header.getHeaderLengthInBytes();
-		fileOutputStream.write(convertIntToPaddedString(TEXT_START));
-		fileOutputStream.write(convertIntToPaddedString(textLength + TEXT_START));
+		fileOutputStream.write(convertIntToPaddedString(BYTES_TAKEN_BY_OFFSETS));
+		fileOutputStream.write(convertIntToPaddedString(textLength + BYTES_TAKEN_BY_OFFSETS));
 	}
 
 	private void writeDataSectionOffsets(FcsHeaderDataRead header, FileOutputStream fileOutputStream)
 	        throws IOException {
-		final int dataStart = header.getHeaderLengthInBytes() + TEXT_START;
-		final int dataEnd = header.getDataLengthInBytes() + dataStart;
+		final int dataStart = header.getHeaderLengthInBytes() + BYTES_TAKEN_BY_OFFSETS + 1;
+		final int dataEnd = dataStart + header.getDataLengthInBytes();
 		fileOutputStream.write(convertIntToPaddedString(dataStart));
 		fileOutputStream.write(convertIntToPaddedString(dataEnd));
 	}

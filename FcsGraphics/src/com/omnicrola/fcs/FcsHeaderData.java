@@ -7,15 +7,11 @@ import com.omnicrola.fcs.io.FcsHeaderDataWriter;
 
 public class FcsHeaderData implements FcsHeaderDataRead {
 	private final HashMap<String, String> headers;
-	private int dataLengthInBytes;
+	private final int dataLengthInBytes;
 
-	public FcsHeaderData() {
-		this(new HashMap<>());
-	}
-
-	public FcsHeaderData(HashMap<String, String> headers) {
+	public FcsHeaderData(HashMap<String, String> headers, int dataLengthInBytes) {
 		this.headers = headers;
-		this.dataLengthInBytes = 0;
+		this.dataLengthInBytes = dataLengthInBytes;
 	}
 
 	public void setHeader(String key, String value) {
@@ -30,10 +26,6 @@ public class FcsHeaderData implements FcsHeaderDataRead {
 	@Override
 	public int getDataLengthInBytes() {
 		return this.dataLengthInBytes;
-	}
-
-	public void setDataLengthInBytes(int dataLengthInBytes) {
-		this.dataLengthInBytes = dataLengthInBytes;
 	}
 
 	@Override

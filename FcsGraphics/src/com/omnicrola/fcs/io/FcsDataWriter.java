@@ -14,12 +14,14 @@ public class FcsDataWriter {
 	private final String targetFilename;
 	private final FcsHeaderDataWriter headerDataWriter;
 	private final HeaderDataExtractor headerExtractor;
+	private final FcsEventDataWriter eventDataWriter;
 
 	public FcsDataWriter(String targetFilename, FcsHeaderDataWriter headerDataWriter,
-	        HeaderDataExtractor headerDataExtractor) {
+	        HeaderDataExtractor headerDataExtractor, FcsEventDataWriter eventDataWriter) {
 		this.targetFilename = targetFilename;
 		this.headerDataWriter = headerDataWriter;
 		this.headerExtractor = headerDataExtractor;
+		this.eventDataWriter = eventDataWriter;
 	}
 
 	public void write(Sample sample) throws IOException {
@@ -30,14 +32,11 @@ public class FcsDataWriter {
 	private void writeDataToFile(Sample sample, final FileOutputStream fileOutputStream) throws IOException {
 		SimpleLogger.log("Writing to file... ");
 
-		final FcsHeaderDataRead header = getHeaderData(sample);
+		final FcsHeaderDataRead header = this.headerExtractor.extract(sample);
 		this.headerDataWriter.write(header, fileOutputStream);
+		this.eventDataWriter.write(sample, fileOutputStream);
 		fileOutputStream.close();
 		SimpleLogger.log("Finished writing.");
-	}
-
-	private FcsHeaderDataRead getHeaderData(Sample sample) {
-		return this.headerExtractor.extract(sample);
 	}
 
 	private FileOutputStream createFile() throws IOException, FileNotFoundException {

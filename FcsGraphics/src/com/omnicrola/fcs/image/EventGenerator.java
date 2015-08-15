@@ -23,10 +23,14 @@ public class EventGenerator {
 	private final Parameter xParam;
 	private final Parameter yParam;
 	private final List<Parameter> parameters;
+	private final float xScale;
+	private final float yScale;
 
 	public EventGenerator(DataBitShifter dataBitShifter, ByteBuffer byteBuffer, Parameter xParam, Parameter yParam,
-	        Sample sample) {
+	        Sample sample, float xScale, float yScale) {
 		this.dataBitShifter = dataBitShifter;
+		this.xScale = xScale;
+		this.yScale = yScale;
 		this.parameters = sample.getParameterArray().getParameters();
 		this.byteBuffer = byteBuffer;
 		this.xParam = xParam;
@@ -36,9 +40,8 @@ public class EventGenerator {
 
 	public void createEventAtCoordinate(int x, int y) {
 		this.byteBuffer.clear();
-		final int scale = 100;
-		final byte[] yValue = this.dataBitShifter.translateFromInteger(flipYAxis(y * scale));
-		final byte[] xValue = this.dataBitShifter.translateFromInteger(x * scale);
+		final byte[] xValue = this.dataBitShifter.translateFromInteger((int) (x * this.xScale));
+		final byte[] yValue = this.dataBitShifter.translateFromInteger(flipYAxis((int) (y * this.yScale)));
 		for (final Parameter parameter : this.parameters) {
 			if (parameter.equals(this.xParam)) {
 				this.byteBuffer.put(xValue);

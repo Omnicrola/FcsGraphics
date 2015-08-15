@@ -24,7 +24,28 @@ public class EventGeneratorFactory {
 		final Parameter yParam = parameters.get(1);
 		SimpleLogger.log("Rendering using parameter '" + xParam.getShortName() + "' as X axis and '"
 		        + yParam.getShortName() + "' as Y axis");
-		return new EventGenerator(this.dataBitShifter, byteBuffer, xParam, yParam, sample);
+
+		final float[] scale = calculateScale(imageWidth, imageHeight, xParam, yParam);
+		return new EventGenerator(this.dataBitShifter, byteBuffer, xParam, yParam, sample, scale[0], scale[1]);
+	}
+
+	private float[] calculateScale(float imageWidth, float imageHeight, Parameter xParam, Parameter yParam) {
+		final float xRange = (float) xParam.getMaxRange();
+		final float yRange = (float) yParam.getMaxRange();
+		final float[] scale = new float[2];
+		scale[0] = xRange / imageWidth;
+		scale[1] = yRange / imageHeight;
+		// if (imageWidth > imageHeight) {
+		// final float imageAspectRatio = imageWidth / imageHeight;
+		// scale[0] = xRange / imageWidth;
+		//
+		// scale[1] = scale[0] / imageAspectRatio;
+		// System.out.println("ratio: " + imageAspectRatio + " : " + scale[0] +
+		// " / " + scale[1]);
+		//
+		// }
+
+		return scale;
 	}
 
 }

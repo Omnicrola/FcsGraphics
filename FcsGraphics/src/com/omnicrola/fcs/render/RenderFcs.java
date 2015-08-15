@@ -54,8 +54,7 @@ public class RenderFcs {
 
 	private static void writeFcsDataToFile(final ProgramArguments arguments, final Sample sample) {
 		try {
-			final String targetFilename = String.valueOf((int) (Math.random() * 1000)) + "_"
-			        + arguments.get(Argument.TARGET_FILENAME);
+			final String targetFilename = arguments.get(Argument.TARGET_FILENAME);
 			final FcsDataWriter fcsDataWriter = createDataWriter(targetFilename);
 			fcsDataWriter.write(sample);
 		} catch (final IOException e) {

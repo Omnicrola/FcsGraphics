@@ -38,10 +38,18 @@ public class EventGenerator {
 		this.sample = sample;
 	}
 
-	public void createEventAtCoordinate(int x, int y) {
+	public void createEventAtCoordinate(int x, int y, int intensity) {
 		this.byteBuffer.clear();
-		final byte[] xValue = this.dataBitShifter.translateFromInteger((int) (x * this.xScale));
-		final byte[] yValue = this.dataBitShifter.translateFromInteger(flipYAxis((int) (y * this.yScale)));
+		final int xPosition = (int) (x * this.xScale);
+		final int yPosition = flipYAxis((int) (y * this.yScale));
+
+		createSingleEvent(xPosition, yPosition);
+
+	}
+
+	private void createSingleEvent(int xPosition, int yPosition) {
+		final byte[] xValue = this.dataBitShifter.translateFromInteger(xPosition);
+		final byte[] yValue = this.dataBitShifter.translateFromInteger(yPosition);
 		for (final Parameter parameter : this.parameters) {
 			if (parameter.equals(this.xParam)) {
 				this.byteBuffer.put(xValue);

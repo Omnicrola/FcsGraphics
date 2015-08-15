@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import com.omnicrola.fcs.FcsHeaderDataRead;
+import com.omnicrola.util.SimpleLogger;
 
 public class FcsHeaderDataWriter {
 
@@ -15,11 +16,15 @@ public class FcsHeaderDataWriter {
 	public static final String HEADER_DELIMITER = "/";
 
 	public void write(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {
+		SimpleLogger.log("FCS version: " + VERSION);
 		writeVersion(fileOutputStream);
+
+		SimpleLogger.log("Writing file offsets...");
 		writeSpacer(fileOutputStream);
 		writeTextSectionOffsets(header, fileOutputStream);
 		writeDataSectionOffsets(header, fileOutputStream);
 		writeAnalysisSectionOffsets(header, fileOutputStream);
+
 		writeHeaderText(header, fileOutputStream);
 	}
 
@@ -49,9 +54,10 @@ public class FcsHeaderDataWriter {
 	}
 
 	private void writeHeaderText(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {
-		final String headerText = header.getHeaderText();
+		final byte[] bytes = header.getHeaderText().getBytes();
+		SimpleLogger.log("Writing header text (" + bytes.length + "b)");
 		fileOutputStream.write(FcsHeaderDataWriter.HEADER_DELIMITER.getBytes());
-		fileOutputStream.write(headerText.getBytes());
+		fileOutputStream.write(bytes);
 	}
 
 	private void writeSpacer(FileOutputStream fileOutputStream) throws IOException {

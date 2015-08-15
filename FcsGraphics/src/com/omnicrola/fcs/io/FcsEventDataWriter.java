@@ -9,6 +9,7 @@ import com.omnicrola.fcs.data.Parameter;
 import com.omnicrola.fcs.data.ParameterArray;
 import com.omnicrola.fcs.data.Sample;
 import com.omnicrola.fcs.data.SampleIterator;
+import com.omnicrola.util.SimpleLogger;
 
 public class FcsEventDataWriter {
 
@@ -16,10 +17,12 @@ public class FcsEventDataWriter {
 		final ParameterArray parameterArray = sample.getParameterArray();
 		final List<Parameter> parameters = parameterArray.getParameters();
 		final SampleIterator eventIterator = sample.getEventIterator();
+		SimpleLogger.log(" - Begin writing event data");
 		while (eventIterator.hasNext()) {
 			final IEventDataAccessor event = eventIterator.next();
 			writeParameterValues(event, parameters, fileOutputStream);
 		}
+		SimpleLogger.log(" - End writing event data");
 	}
 
 	private void writeParameterValues(IEventDataAccessor event, List<Parameter> parameters,

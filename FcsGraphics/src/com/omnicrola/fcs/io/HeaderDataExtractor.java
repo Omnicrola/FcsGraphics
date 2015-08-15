@@ -9,17 +9,24 @@ import com.omnicrola.fcs.FcsHeaderDataRead;
 import com.omnicrola.fcs.data.Parameter;
 import com.omnicrola.fcs.data.ParameterArray;
 import com.omnicrola.fcs.data.Sample;
+import com.omnicrola.util.SimpleLogger;
 
 public class HeaderDataExtractor {
 
 	public FcsHeaderDataRead extract(Sample sample) {
 
+		SimpleLogger.log("Generating header");
 		final HashMap<String, String> headers = BasicHeaderData.getHeaders();
+
 		final int totalEvents = sample.getTotalEvents();
+		SimpleLogger.log(" - Total Events: " + totalEvents);
+
 		headers.put(BasicHeaderData.TOTAL_EVENTS, String.valueOf(totalEvents));
 		headers.put(BasicHeaderData.PARAMETER_COUNT, String.valueOf(sample.getParameterCount()));
 		final ParameterArray parameterArray = sample.getParameterArray();
+
 		final List<Parameter> parameters = parameterArray.getParameters();
+		SimpleLogger.log(" - Parameter Count: " + parameters.size());
 		for (final Parameter parameter : parameters) {
 			createParameter(parameter, headers);
 		}
@@ -32,7 +39,6 @@ public class HeaderDataExtractor {
 
 	private static void createParameter(Parameter parameter, HashMap<String, String> headers) {
 		final int parameterId = parameter.getIndex() + 1;
-		System.out.println("parameterId: " + parameterId);
 		// bytes for this parameters
 		final String bitSize = String.valueOf(parameter.getDataType().byteSize() * 8);
 		headers.put(BasicHeaderData.REQUIRED + "P" + parameterId + "B", bitSize);

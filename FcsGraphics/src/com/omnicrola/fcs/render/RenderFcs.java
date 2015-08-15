@@ -19,12 +19,14 @@ import com.omnicrola.util.SimpleLogger;
 public class RenderFcs {
 	public static void main(String[] args) {
 		SimpleLogger.log("Starting...");
+		final long startTime = System.nanoTime();
 
 		final ProgramArguments arguments = parseArguments(args);
 		final Sample sample = convertImageToFcsData(arguments);
 		writeFcsDataToFile(arguments, sample);
 
-		SimpleLogger.log("Done.");
+		final float elapsed = (System.nanoTime() - startTime) / 1_000_000f;
+		SimpleLogger.log("Done (" + elapsed + "ms)");
 	}
 
 	private static ProgramArguments parseArguments(String[] args) {

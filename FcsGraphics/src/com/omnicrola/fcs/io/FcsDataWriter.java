@@ -30,13 +30,13 @@ public class FcsDataWriter {
 	}
 
 	private void writeDataToFile(Sample sample, final FileOutputStream fileOutputStream) throws IOException {
-		SimpleLogger.log("Writing to file... ");
+		SimpleLogger.log("Writing to FCS file... ");
 
 		final FcsHeaderDataRead header = this.headerExtractor.extract(sample);
 		this.headerDataWriter.write(header, fileOutputStream);
 		this.eventDataWriter.write(sample, fileOutputStream);
 		fileOutputStream.close();
-		SimpleLogger.log("Finished writing.");
+		SimpleLogger.log("Finished writing FCS.");
 	}
 
 	private FileOutputStream createFile() throws IOException, FileNotFoundException {

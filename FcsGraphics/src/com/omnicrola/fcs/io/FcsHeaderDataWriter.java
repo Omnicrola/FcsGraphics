@@ -12,7 +12,7 @@ public class FcsHeaderDataWriter {
 	private static final String FOUR_SPACES = "    ";
 	private static final String VERSION = "FCS3.1";
 
-	private static final int BYTES_TAKEN_BY_OFFSETS = 58;
+	public static final int BYTES_TAKEN_BY_OFFSETS = 58;
 	public static final String HEADER_DELIMITER = "/";
 
 	public void write(FcsHeaderDataRead header, FileOutputStream fileOutputStream) throws IOException {

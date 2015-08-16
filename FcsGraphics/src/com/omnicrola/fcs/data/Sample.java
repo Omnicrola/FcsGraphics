@@ -20,10 +20,7 @@ public class Sample implements ISample {
 
 	@Override
 	public void addEvent(byte[] eventData) {
-		for (int i = 0; i < eventData.length; i++) {
-			final byte b = eventData[i];
-			this.memoryBuffer.put(b);
-		}
+		this.memoryBuffer.put(eventData);
 		this.totalEvents++;
 	}
 

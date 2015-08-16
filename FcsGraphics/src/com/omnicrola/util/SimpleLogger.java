@@ -22,4 +22,9 @@ public class SimpleLogger {
 		Logger.getLogger(NAME).log(Level.ALL, "Error", exception);
 	}
 
+	public static void error(String message) {
+		System.err.println(message);
+		Logger.getLogger(NAME).log(Level.ALL, "Error", message);
+	}
+
 }

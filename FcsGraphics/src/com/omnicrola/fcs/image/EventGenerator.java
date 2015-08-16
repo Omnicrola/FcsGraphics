@@ -38,18 +38,32 @@ public class EventGenerator {
 		this.sample = sample;
 	}
 
-	public void createEventAtCoordinate(int x, int y, int intensity) {
-		this.byteBuffer.clear();
-		final int xPosition = (int) (x * this.xScale);
-		final int yPosition = flipYAxis((int) (y * this.yScale));
+	public void createEventAtCoordinate(int imageX, int imageY, int density) {
+		if (density < 0 || density > 16) {
+			throw new IllegalArgumentException("Event density cannot must be within 0-16 (was " + density + ")");
+		}
 
-		createSingleEvent(xPosition, yPosition);
+		final int dataX = (int) (imageX * this.xScale);
+		final int dataY = flipYAxis((int) (imageY * this.yScale));
+
+		int x = 0;
+		int y = 0;
+		final int wrap = (int) Math.sqrt(density);
+		for (int i = 0; i < density; i++) {
+			createSingleEvent(dataX + x, dataY + y);
+			x++;
+			if (x >= wrap) {
+				x = 0;
+				y++;
+			}
+		}
 
 	}
 
 	private void createSingleEvent(int xPosition, int yPosition) {
 		final byte[] xValue = this.dataBitShifter.translateFromInteger(xPosition);
 		final byte[] yValue = this.dataBitShifter.translateFromInteger(yPosition);
+		this.byteBuffer.clear();
 		for (final Parameter parameter : this.parameters) {
 			if (parameter.equals(this.xParam)) {
 				this.byteBuffer.put(xValue);

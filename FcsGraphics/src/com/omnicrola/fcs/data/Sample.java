@@ -77,4 +77,8 @@ public class Sample implements ISample {
 		return this.parameterList.getParameters().size();
 	}
 
+	public int getSampleSizeInBytes() {
+		return this.totalEvents * this.settings.getParameterArray().getEventByteSize();
+	}
+
 }

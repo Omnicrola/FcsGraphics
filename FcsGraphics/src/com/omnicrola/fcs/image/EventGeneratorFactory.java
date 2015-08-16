@@ -35,15 +35,6 @@ public class EventGeneratorFactory {
 		final float[] scale = new float[2];
 		scale[0] = xRange / imageWidth;
 		scale[1] = yRange / imageHeight;
-		// if (imageWidth > imageHeight) {
-		// final float imageAspectRatio = imageWidth / imageHeight;
-		// scale[0] = xRange / imageWidth;
-		//
-		// scale[1] = scale[0] / imageAspectRatio;
-		// System.out.println("ratio: " + imageAspectRatio + " : " + scale[0] +
-		// " / " + scale[1]);
-		//
-		// }
 
 		return scale;
 	}

@@ -38,15 +38,16 @@ public class ImageDataConverter implements IFcsDataProvider {
 			for (int y = 0; y < height; y++) {
 				final int[] pixel = raster.getPixel(x, y, rgba);
 				final int grayscale = getGrayscale(pixel);
-				if (grayscale < WHITE) {
-					eventGenerator.createEventAtCoordinate(x, y, grayscale);
-				}
+				eventGenerator.createEventAtCoordinate(x, y, grayscale);
 			}
 		}
 	}
 
 	private int getGrayscale(int[] rgb) {
-		return (int) ((rgb[0] * 0.3f) + (rgb[1] * 0.59f) + (rgb[2] * 0.11f));
+		final int intensity = (int) ((rgb[0] * 0.3f) + (rgb[1] * 0.59f) + (rgb[2] * 0.11f));
+		final int invertedGray = WHITE - intensity;
+		final int sixteenBitGrayscale = invertedGray / 16;
+		return sixteenBitGrayscale;
 	}
 
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar">
+    
+	<property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="C:/Users/Eric/workspaces/Lab"/>
+    <property name="dir.jarfile" value="C:/Users/Eric/git/FcsGraphics/FcsGraphics/dist"/>
+	
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/FcsGraphics.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="com.omnicrola.fcs.render.RenderFcs"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="C:/Users/Eric/git/FcsGraphics/FcsGraphics/bin"/>
+        </jar>
+    </target>
+</project>

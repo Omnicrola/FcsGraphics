@@ -81,4 +81,8 @@ public class Sample implements ISample {
 		return this.totalEvents * this.settings.getParameterArray().getEventByteSize();
 	}
 
+	public int getEventCapacity() {
+		return this.settings.getEventCapacity();
+	}
+
 }

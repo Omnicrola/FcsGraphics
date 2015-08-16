@@ -42,6 +42,10 @@ public class EventGenerator {
 		if (density < 0 || density > 16) {
 			throw new IllegalArgumentException("Event density cannot must be within 0-16 (was " + density + ")");
 		}
+		if (this.sample.getTotalEvents() > this.sample.getEventCapacity()) {
+			throw new RuntimeException(
+			        "Maximum event count reached (" + this.sample.getEventCapacity() + "), cannot continue.");
+		}
 
 		final int dataX = (int) (imageX * this.xScale);
 		final int dataY = flipYAxis((int) (imageY * this.yScale));

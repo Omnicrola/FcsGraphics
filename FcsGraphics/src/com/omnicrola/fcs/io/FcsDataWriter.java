@@ -31,7 +31,8 @@ public class FcsDataWriter {
 
 	private void writeDataToFile(Sample sample, final FileOutputStream fileOutputStream) throws IOException {
 		SimpleLogger.log("Writing to FCS file... ");
-		SimpleLogger.log("Data size: " + sample.getSampleSizeInBytes() / 1024f / 1024f);
+		final float sizeInMb = sample.getSampleSizeInBytes() / 1024f / 1024f;
+		SimpleLogger.log("Data size: " + sizeInMb + "MB");
 
 		final FcsHeaderDataRead header = this.headerExtractor.extract(sample);
 		this.headerDataWriter.write(header, fileOutputStream);

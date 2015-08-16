@@ -10,8 +10,10 @@ public class FileFinder {
 	public static String findFile(String fileDescription) {
 		final JFileChooser jFileChooser = new JFileChooser();
 		jFileChooser.setDialogTitle(fileDescription);
-		File applicationWorkingDirectory = new File(Paths.get("").toAbsolutePath().toString());
+
+		final File applicationWorkingDirectory = new File(Paths.get("").toAbsolutePath().toString());
 		jFileChooser.setCurrentDirectory(applicationWorkingDirectory);
+
 		if (jFileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			final File selectedFile = jFileChooser.getSelectedFile();
 			return selectedFile.getAbsolutePath();

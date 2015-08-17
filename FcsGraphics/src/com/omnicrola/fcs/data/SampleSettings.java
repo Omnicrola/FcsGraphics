@@ -5,13 +5,13 @@ import java.util.ArrayList;
 
 public class SampleSettings {
 
-	private static final int FIVE_MILLION = 5_000_000;
+	private static final int THREE_MILLION = 3_000_000;
 	private static final int PARAMETER_COUNT = 14;
 	private static final String[] defaultnames = buildDefaultNames();
 	public static final SampleSettings DEFAULT = buildDefault();
 
 	private static SampleSettings buildDefault() {
-		final int capacity = FIVE_MILLION;
+		final int capacity = THREE_MILLION;
 		final ArrayList<Parameter> parameterList = new ArrayList<Parameter>();
 		for (int i = 0; i < PARAMETER_COUNT; i++) {
 			parameterList.add(Parameter.makeDefault(i, defaultnames[i]));

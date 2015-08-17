@@ -1,6 +1,9 @@
 package com.omnicrola.fcs.data;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
+
+import com.omnicrola.util.SimpleLogger;
 
 public class Sample implements ISample {
 
@@ -20,8 +23,14 @@ public class Sample implements ISample {
 
 	@Override
 	public void addEvent(byte[] eventData) {
-		this.memoryBuffer.put(eventData);
-		this.totalEvents++;
+		try {
+			this.memoryBuffer.put(eventData);
+			this.totalEvents++;
+		} catch (final BufferOverflowException exception) {
+			SimpleLogger.error(exception);
+			SimpleLogger.error("Sample event limit exceeded (" + this.settings.getEventCapacity() + ").");
+			System.exit(49);
+		}
 	}
 
 	@Override

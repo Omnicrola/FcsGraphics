@@ -1,5 +1,6 @@
 package com.omnicrola.fcs.data;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class EventDataAccessor implements IEventDataAccessor, IEventDataWriter {
@@ -19,6 +20,13 @@ public class EventDataAccessor implements IEventDataAccessor, IEventDataWriter {
 	@Override
 	public byte[] getBytes(Parameter parameter) {
 		return sliceData(parameter);
+	}
+
+	@Override
+	public ByteBuffer getFullBytes() {
+		final ByteBuffer buffer = ByteBuffer.allocate(this.eventData.length).put(this.eventData);
+		buffer.rewind();
+		return buffer;
 	}
 
 	@Override

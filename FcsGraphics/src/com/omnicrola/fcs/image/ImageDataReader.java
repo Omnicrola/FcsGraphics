@@ -22,7 +22,12 @@ public class ImageDataReader {
 		final ArrayList<BufferedImage> images = new ArrayList<>();
 		try {
 			for (final String filename : this.filenames) {
-				images.add(ImageIO.read(new File(filename)));
+				final File file = new File(filename);
+				if (file.exists()) {
+					images.add(ImageIO.read(file));
+				} else {
+					SimpleLogger.error("File not found : " + filename);
+				}
 			}
 		} catch (final IOException e) {
 			SimpleLogger.error(e);

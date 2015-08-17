@@ -12,9 +12,9 @@ public class ImageDataConverter implements IFcsDataProvider {
 
 	private static final int WHITE = 255;
 	private final ImageDataReader imageDataReader;
-	private final EventGeneratorFactory eventGeneratorFactory;
+	private final EventGeneratorStrategyBuilder eventGeneratorFactory;
 
-	public ImageDataConverter(ImageDataReader imageDataReader, EventGeneratorFactory eventGeneratorFactory) {
+	public ImageDataConverter(ImageDataReader imageDataReader, EventGeneratorStrategyBuilder eventGeneratorFactory) {
 		this.imageDataReader = imageDataReader;
 		this.eventGeneratorFactory = eventGeneratorFactory;
 	}
@@ -26,22 +26,22 @@ public class ImageDataConverter implements IFcsDataProvider {
 			final int height = bufferedImage.getHeight();
 			SimpleLogger.log("Loaded image : " + width + " x " + height + " (" + (width * height) + " pixels) ");
 
-			final EventGenerator eventGenerator = this.eventGeneratorFactory.build(sample, width, height);
+			final EventGeneratorStrategy eventStrategy = this.eventGeneratorFactory.buildImageStrategy(width, height);
 
-			createEvents(bufferedImage, width, height, eventGenerator);
+			createEvents(bufferedImage, width, height, eventStrategy);
 		}
 
 	}
 
 	private void createEvents(final BufferedImage image, final int width, final int height,
-	        final EventGenerator eventGenerator) {
+	        final EventGeneratorStrategy eventStrategy) {
 		final WritableRaster raster = image.getRaster();
 		final int[] rgba = new int[4];
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				final int[] pixel = raster.getPixel(x, y, rgba);
 				final int grayscale = getGrayscale(pixel);
-				eventGenerator.createEventAtCoordinate(x, y, grayscale);
+				eventStrategy.createEventAtCoordinate(x, y, grayscale);
 			}
 		}
 	}

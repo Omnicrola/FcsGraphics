@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class BasicHeaderData {
 
 	public static final String STANDARD = "$";
-	public static final String CUSTOM = "#";
 	public static final String TOTAL_EVENTS = STANDARD + "TOT";
 	public static final String PARAMETER_COUNT = STANDARD + "PAR";
 	public static final String DATE = STANDARD + "DATE";

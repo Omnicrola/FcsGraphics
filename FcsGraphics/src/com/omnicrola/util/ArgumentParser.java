@@ -31,17 +31,31 @@ public class ArgumentParser {
 		final HashMap<Argument, List<String>> arguments = buildMap();
 
 		for (int i = 0; i < args.length; i++) {
-			final String arg = args[i];
-			if (isArgument(arg)) {
-				final Argument argument = switchMap.get(arg);
-				String val = "";
-				if (args.length >= i + 1) {
-					val = args[i + 1];
-				}
-				arguments.get(argument).add(val);
-			}
+			getArgument(args, arguments, i);
 		}
 		return new ProgramArguments(arguments);
+	}
+
+	private static void getArgument(String[] args, final HashMap<Argument, List<String>> arguments, int index) {
+		final String arg = args[index];
+		if (isArgument(arg)) {
+			saveArgument(args, arguments, index, arg);
+		}
+	}
+
+	private static void saveArgument(String[] args, final HashMap<Argument, List<String>> arguments, int index,
+	        final String arg) {
+		final Argument argument = switchMap.get(arg);
+		String val = "";
+		final List<String> argumentValues = arguments.get(argument);
+		for (int j = index + 1; j < args.length; j++) {
+			val = args[j];
+			if (val.substring(0, 1).equals("-")) {
+				break;
+			}
+			argumentValues.add(val);
+
+		}
 	}
 
 	private static HashMap<Argument, List<String>> buildMap() {

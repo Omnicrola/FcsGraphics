@@ -1,11 +1,12 @@
 package com.omnicrola.fcs.render;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.omnicrola.fcs.data.DataBitShifter;
 import com.omnicrola.fcs.data.MemoryAllocator;
 import com.omnicrola.fcs.data.Sample;
-import com.omnicrola.fcs.image.EventGeneratorFactory;
+import com.omnicrola.fcs.image.EventGeneratorStrategyBuilder;
 import com.omnicrola.fcs.image.ImageDataConverter;
 import com.omnicrola.fcs.image.ImageDataReader;
 import com.omnicrola.fcs.io.FcsDataWriter;
@@ -43,11 +44,12 @@ public class RenderFcs {
 	}
 
 	private static Sample convertImageToFcsData(final ProgramArguments arguments) {
-		final ImageDataReader imageDataReader = new ImageDataReader(arguments.getAll(Argument.SOURCE_IMAGE));
-		final EventGeneratorFactory eventGeneratorFactory = new EventGeneratorFactory(DataBitShifter.INSTANCE);
+		final List<String> imageFilenames = arguments.getAll(Argument.SOURCE_IMAGE);
+		final ImageDataReader imageDataReader = new ImageDataReader(imageFilenames);
+		final Sample sample = new Sample(new MemoryAllocator(), 0);
+		final EventGeneratorStrategyBuilder eventGeneratorFactory = new EventGeneratorStrategyBuilder(DataBitShifter.INSTANCE, sample);
 		final ImageDataConverter imageDataConverter = new ImageDataConverter(imageDataReader, eventGeneratorFactory);
 
-		final Sample sample = new Sample(new MemoryAllocator(), 0);
 		imageDataConverter.writeToSample(sample);
 		return sample;
 	}

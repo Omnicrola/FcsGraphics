@@ -14,10 +14,6 @@ public class FcsHeaderData implements FcsHeaderDataRead {
 		this.dataLengthInBytes = dataLengthInBytes;
 	}
 
-	public void setHeader(String key, String value) {
-		this.headers.put(key, value);
-	}
-
 	@Override
 	public int getHeaderLengthInBytes() {
 		return getHeaderText().getBytes().length;

@@ -8,33 +8,34 @@ import com.omnicrola.fcs.data.IEventDataAccessor;
 import com.omnicrola.fcs.data.Parameter;
 import com.omnicrola.fcs.data.Sample;
 import com.omnicrola.fcs.data.SampleIterator;
+import com.omnicrola.fcs.data.SampleSettings;
 
 public class EventGenerator {
 
-	private static final byte[] ONE = createOne();
-
-	private static byte[] createOne() {
-		final byte[] bytes = new byte[4];
-		bytes[3] = 1;
-		return bytes;
-	}
-
-	private final Sample sample;
+	private Sample currentSample;
 	private final DataBitShifter dataBitShifter;
-	private final ByteBuffer byteBuffer;
+	private final ByteBuffer currentEvent;
 	private final List<Parameter> parameters;
 	private SampleIterator eventIterator;
+	private Sample readSample;
 
-	public EventGenerator(DataBitShifter dataBitShifter, ByteBuffer byteBuffer, Sample sample) {
+	public EventGenerator(DataBitShifter dataBitShifter, ByteBuffer byteBuffer, Sample currentSample,
+	        Sample readSample) {
 		this.dataBitShifter = dataBitShifter;
-		this.parameters = sample.getParameterArray().getParameters();
-		this.byteBuffer = byteBuffer;
-		this.sample = sample;
+		this.parameters = currentSample.getParameterArray().getParameters();
+		this.currentEvent = byteBuffer;
+		this.currentSample = currentSample;
+		this.readSample = readSample;
 		rewind();
 	}
 
 	public void rewind() {
-		this.eventIterator = this.sample.getEventIterator();
+
+		final Sample temp = this.currentSample;
+		this.currentSample = this.readSample;
+		this.readSample = temp;
+		this.eventIterator = this.readSample.getEventIterator();
+		this.currentSample.clearDataAndUseNewSettings(SampleSettings.DEFAULT);
 	}
 
 	public void createEventAtCoordinate(EventGeneratorStrategy strategy, int imageX, int imageY, int density) {
@@ -65,32 +66,33 @@ public class EventGenerator {
 		final byte[] yValue = this.dataBitShifter.translateFromInteger(yPosition);
 		final Parameter xParam = strategy.getXParam();
 		final Parameter yParam = strategy.getYParam();
-		final ByteBuffer sourceBuffer = getBytesForExistingEvent();
+		final ByteBuffer sourceBuffer;
+		if (this.eventIterator.hasNext()) {
+			final IEventDataAccessor event = this.eventIterator.next();
+			sourceBuffer = event.getFullBytes();
+		} else {
+			final int eventByteSize = 4 * this.currentSample.getParameterCount();
+			sourceBuffer = ByteBuffer.allocate(eventByteSize).put(new byte[eventByteSize]);
+			sourceBuffer.rewind();
+		}
+		interleaveBytes(xValue, yValue, xParam, yParam, sourceBuffer);
+		this.currentSample.addEvent(this.currentEvent.array());
+
+	}
+
+	private void interleaveBytes(final byte[] xValue, final byte[] yValue, final Parameter xParam,
+	        final Parameter yParam, final ByteBuffer sourceBuffer) {
 		final byte[] existingValue = new byte[4];
-		this.byteBuffer.clear();
+		this.currentEvent.clear();
 		for (final Parameter parameter : this.parameters) {
 			sourceBuffer.get(existingValue);
 			if (parameter.equals(xParam)) {
-				this.byteBuffer.put(xValue);
+				this.currentEvent.put(xValue);
 			} else if (parameter.equals(yParam)) {
-				this.byteBuffer.put(yValue);
+				this.currentEvent.put(yValue);
 			} else {
-				this.byteBuffer.put(existingValue);
+				this.currentEvent.put(existingValue);
 			}
-		}
-		this.sample.addEvent(this.byteBuffer.array());
-	}
-
-	private ByteBuffer getBytesForExistingEvent() {
-		if (this.eventIterator.hasNext()) {
-			final IEventDataAccessor event = this.eventIterator.next();
-			final ByteBuffer buffer = event.getFullBytes();
-			return buffer;
-		} else {
-			final int eventByteSize = 4 * this.sample.getParameterCount();
-			final ByteBuffer buffer = ByteBuffer.allocate(eventByteSize).put(new byte[eventByteSize]);
-			buffer.rewind();
-			return buffer;
 		}
 	}
 

@@ -23,7 +23,8 @@ public class EventGeneratorStrategyBuilder {
 		this.parameters = sample.getParameterArray().getParameters();
 		this.usedParams = 0;
 		final ByteBuffer byteBuffer = ByteBuffer.allocate(BYTES_PER_INTEGER * this.sample.getParameterCount());
-		this.eventGenerator = new EventGenerator(this.dataBitShifter, byteBuffer, this.sample);
+		final Sample sampleCopy = this.sample.clone();
+		this.eventGenerator = new EventGenerator(this.dataBitShifter, byteBuffer, this.sample, sampleCopy);
 	}
 
 	public EventGeneratorStrategy buildImageStrategy(int imageWidth, int imageHeight) {

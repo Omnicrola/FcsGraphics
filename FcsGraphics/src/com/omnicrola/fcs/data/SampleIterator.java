@@ -41,4 +41,5 @@ public class SampleIterator {
 		}
 		return this.accessor;
 	}
+
 }

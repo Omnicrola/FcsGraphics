@@ -91,4 +91,11 @@ public class Sample implements ISample {
 		return this.settings.getEventCapacity();
 	}
 
+	@Override
+	public Sample clone() {
+		final Sample newSample = new Sample(this.allocator, this.index);
+		newSample.memoryBuffer.put(this.memoryBuffer.asReadOnlyBuffer());
+		return newSample;
+	}
+
 }

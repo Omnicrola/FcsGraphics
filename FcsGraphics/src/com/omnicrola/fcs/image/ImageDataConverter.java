@@ -2,6 +2,7 @@ package com.omnicrola.fcs.image;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.util.ArrayList;
 
 import com.omnicrola.fcs.IFcsDataProvider;
 import com.omnicrola.fcs.data.Sample;
@@ -19,14 +20,16 @@ public class ImageDataConverter implements IFcsDataProvider {
 	}
 
 	public void writeToSample(Sample sample) {
-		final BufferedImage image = this.imageDataReader.read();
-		final int width = image.getWidth();
-		final int height = image.getHeight();
-		SimpleLogger.log("Loaded image : " + width + " x " + height + " (" + (width * height) + " pixels) ");
+		final ArrayList<BufferedImage> images = this.imageDataReader.read();
+		for (final BufferedImage bufferedImage : images) {
+			final int width = bufferedImage.getWidth();
+			final int height = bufferedImage.getHeight();
+			SimpleLogger.log("Loaded image : " + width + " x " + height + " (" + (width * height) + " pixels) ");
 
-		final EventGenerator eventGenerator = this.eventGeneratorFactory.build(sample, width, height);
+			final EventGenerator eventGenerator = this.eventGeneratorFactory.build(sample, width, height);
 
-		createEvents(image, width, height, eventGenerator);
+			createEvents(bufferedImage, width, height, eventGenerator);
+		}
 
 	}
 

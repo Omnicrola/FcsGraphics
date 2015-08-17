@@ -3,6 +3,8 @@ package com.omnicrola.fcs.image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -10,19 +12,22 @@ import com.omnicrola.util.SimpleLogger;
 
 public class ImageDataReader {
 
-	private final String argumentValue;
+	private final List<String> filenames;
 
-	public ImageDataReader(String argumentValue) {
-		this.argumentValue = argumentValue;
+	public ImageDataReader(List<String> images) {
+		this.filenames = images;
 	}
 
-	public BufferedImage read() {
+	public ArrayList<BufferedImage> read() {
+		final ArrayList<BufferedImage> images = new ArrayList<>();
 		try {
-			return ImageIO.read(new File(this.argumentValue));
+			for (final String filename : this.filenames) {
+				images.add(ImageIO.read(new File(filename)));
+			}
 		} catch (final IOException e) {
 			SimpleLogger.error(e);
 		}
-		return null;
+		return images;
 	}
 
 }

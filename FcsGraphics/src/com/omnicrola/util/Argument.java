@@ -1,7 +1,11 @@
 package com.omnicrola.util;
 
 public enum Argument {
-	SOURCE_IMAGE("-image"), TARGET_FILENAME("-fcs");
+	//@formatter:off
+	SOURCE_IMAGE("-image"),
+	TARGET_FILENAME("-fcs");
+
+	//@formatter:on
 
 	private final String commandLineSwitch;
 

@@ -43,7 +43,7 @@ public class RenderFcs {
 	}
 
 	private static Sample convertImageToFcsData(final ProgramArguments arguments) {
-		final ImageDataReader imageDataReader = new ImageDataReader(arguments.get(Argument.SOURCE_IMAGE));
+		final ImageDataReader imageDataReader = new ImageDataReader(arguments.getAll(Argument.SOURCE_IMAGE));
 		final EventGeneratorFactory eventGeneratorFactory = new EventGeneratorFactory(DataBitShifter.INSTANCE);
 		final ImageDataConverter imageDataConverter = new ImageDataConverter(imageDataReader, eventGeneratorFactory);
 
@@ -54,7 +54,7 @@ public class RenderFcs {
 
 	private static void writeFcsDataToFile(final ProgramArguments arguments, final Sample sample) {
 		try {
-			final String targetFilename = arguments.get(Argument.TARGET_FILENAME);
+			final String targetFilename = arguments.getSingle(Argument.TARGET_FILENAME);
 			final FcsDataWriter fcsDataWriter = createDataWriter(targetFilename);
 			fcsDataWriter.write(sample);
 		} catch (final IOException e) {

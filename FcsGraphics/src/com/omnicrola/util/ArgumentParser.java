@@ -1,5 +1,6 @@
 package com.omnicrola.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,8 @@ public class ArgumentParser {
 	}
 
 	public static ProgramArguments parse(String[] args) {
-		final HashMap<Argument, String> arguments = new HashMap<>();
+		final HashMap<Argument, List<String>> arguments = buildMap();
+
 		for (int i = 0; i < args.length; i++) {
 			final String arg = args[i];
 			if (isArgument(arg)) {
@@ -36,10 +38,18 @@ public class ArgumentParser {
 				if (args.length >= i + 1) {
 					val = args[i + 1];
 				}
-				arguments.put(argument, val);
+				arguments.get(argument).add(val);
 			}
 		}
 		return new ProgramArguments(arguments);
+	}
+
+	private static HashMap<Argument, List<String>> buildMap() {
+		final HashMap<Argument, List<String>> hashMap = new HashMap<>();
+		for (final Argument argument : Argument.values()) {
+			hashMap.put(argument, new ArrayList<>());
+		}
+		return hashMap;
 	}
 
 	private static boolean isArgument(String string) {

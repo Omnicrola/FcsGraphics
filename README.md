@@ -21,3 +21,7 @@ Command line usage :
   * [FlowJo](http://www.flowjo.com/flowjo-free-trial/) (not tested)
 
 Shockingly, FCS is not an efficient means of storing image data.  Most FCS files contain a few hundred thousand events, which are sufficient for most lab experiments.  By default, the program will attempt to scale the source image to fit within the bounds of the data range (currently 2^24 or 16,777,216).  As a result, for images greater than about 400x400 pixels, the utility will generate more event data than can be handled by the FCS format, and crash with an exception declaring that the event capacity has been reached.
+
+## Example
+The screenshot below was taken from the FCS file generated from the "smurf.png" file in the /resources folder.
+![](/FcsGraphics/resources/smurf_thumb.png "Smurf Ice Cream")
